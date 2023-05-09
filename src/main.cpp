@@ -27,10 +27,10 @@ template <size_t bs> struct signalWith : signalOn<bs>
     signalWith() : signalOn<bs>(&ldata[0]) {}
 };
 
-template <typename S, typename T,
+template <typename S,
           std::enable_if_t<std::is_member_function_pointer<decltype(&S::streamRecieve)>::value,
                            bool> = true>
-struct CanRecieveT : std::true_type
+struct CanRecieve : std::true_type
 {
 };
 
@@ -42,7 +42,7 @@ struct CanSend : std::true_type
 };
 
 template <typename S, typename T,
-          std::enable_if_t<std::conjunction_v<CanSend<S>, CanRecieveT<S, T>>, bool> = true>
+          std::enable_if_t<std::conjunction_v<CanSend<S>, CanRecieve<T>>, bool> = true>
 struct IsSendRecievePair : std::true_type
 {
 };
